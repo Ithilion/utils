@@ -21,7 +21,7 @@ if fileExtension != ".qpf":
 	print("inputfile is not a qpf file")
 	exit()
 
-r = re.compile(r"\d+(/|:)\d+")
+r = re.compile(r"[1-9]\d*(/|:)\d+")
 match = r.match(args.fps)
 if not match:
 	print("invalid --fps input")
