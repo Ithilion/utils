@@ -17,18 +17,19 @@ error_message = "Something went wrong while fetching oQUeue... exiting."
 print("Fetching oQueue...")
 s = requests.session()
 
-r = s.get("http://solidice.com/addons/wow/oqueue")
+r = s.get("http://solidice.com/downloads/world-of-warcraft/oqueue")
 if not r:
 	print(error_message)
 	sys.exit()
 
-nonce = re.search("<input type='hidden' name='nonce' value='(.*?)'>", r.text).group(1)
-if not nonce:
+token = re.search('http://solidice.com/downloads/world-of-warcraft/oqueue/download\?_token=(.*?)"', r.text)
+if not token:
 	print(error_message)
 	sys.exit()
+token = token.group(1)
 
-payload = {"id": "30", "nonce": nonce}
-r = s.get("http://solidice.com/files/serve.php", params = payload)
+payload = {"_token": token}
+r = s.get("http://solidice.com/download/world-of-warcraft/oqueue", params = payload)
 if not r:
 	print(error_message)
 	sys.exit()
