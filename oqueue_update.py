@@ -4,47 +4,57 @@ import requests
 import shutil
 import sys
 import tempfile
+import winreg
 import zipfile
 
-# TODO: get wow_path from registry
-
-oqueue_tmp = os.path.join(tempfile.gettempdir(), "oqueue_update.tmp.zip")
-wow_path = "C:\Program Files (x86)\World of Warcraft"
-oqueue_path = os.path.join(wow_path, "Interface", "Addons", "oqueue")
-addons_path = os.path.join(wow_path, "Interface", "Addons")
-error_message = "Something went wrong while fetching oQUeue... exiting."
-
-print("Fetching oQueue...")
-s = requests.session()
-
-r = s.get("http://solidice.com/downloads/world-of-warcraft/oqueue")
-if not r:
+def critical_error(error_message):
 	print(error_message)
 	sys.exit()
 
-token = re.search('http://solidice.com/downloads/world-of-warcraft/oqueue/download\?_token=(.*?)"', r.text)
-if not token:
-	print(error_message)
-	sys.exit()
-token = token.group(1)
+def main():
+	try:
+		key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, "SOFTWARE\Blizzard Entertainment\World of Warcraft", access = winreg.KEY_READ | winreg.KEY_WOW64_32KEY)
+		wow_path = winreg.QueryValueEx(key, "InstallPath")[0]
+	except WindowsError:
+		critical_error("Could not locate World of Warcraft folder... exiting")
 
-payload = {"_token": token}
-r = s.get("http://solidice.com/download/world-of-warcraft/oqueue", params = payload)
-if not r:
-	print(error_message)
-	sys.exit()
+	oqueue_tmp = os.path.join(tempfile.gettempdir(), "oqueue_update.tmp.zip")
+	oqueue_path = os.path.join(wow_path, "Interface", "Addons", "oqueue")
+	addons_path = os.path.join(wow_path, "Interface", "Addons")
 
-with open(oqueue_tmp, "wb") as f:
-	f.write(r.content)
+	print("Fetching oQueue...")
+	s = requests.session()
 
-if os.path.isdir(oqueue_path):
-	print("Previous installation detected, removing it...")
-	shutil.rmtree(oqueue_path)
+	r = s.get("http://solidice.com/downloads/world-of-warcraft/oqueue")
+	if not r:
+		critical_error("Something went wrong while fetching oQueue... exiting.")
 
-print("Extracting...")
-with open(oqueue_tmp, "rb") as f:
-	z = zipfile.ZipFile(f)
-	z.extractall(addons_path)
+	token = re.search('http://solidice.com/downloads/world-of-warcraft/oqueue/download\?_token=(.*?)"', r.text)
+	if not token:
+		critical_error("Something went wrong while fetching oQueue... exiting.")
+	token = token.group(1)
 
-print("Cleaning up...")
-os.remove(oqueue_tmp)
+	payload = {"_token": token}
+	r = s.get("http://solidice.com/download/world-of-warcraft/oqueue", params = payload)
+	if not r:
+		critical_error("Something went wrong while fetching oQueue... exiting.")
+
+	with open(oqueue_tmp, "wb") as f:
+		f.write(r.content)
+
+	if os.path.isdir(oqueue_path):
+		print("Previous installation detected, removing it...")
+		shutil.rmtree(oqueue_path)
+
+	print("Extracting...")
+	with open(oqueue_tmp, "rb") as f:
+		z = zipfile.ZipFile(f)
+		z.extractall(addons_path)
+
+	print("Cleaning up...")
+	os.remove(oqueue_tmp)
+
+	input("All done, press ENTER to exit")
+
+if __name__ == "__main__":
+	main()
