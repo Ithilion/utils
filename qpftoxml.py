@@ -1,8 +1,9 @@
 import argparse
+import math
 import os
 import re
 import random
-import math
+
 from lxml import etree
 
 parser = argparse.ArgumentParser(description = "Converts a .qpf frame list to a .xml Matroska chapters file")
