@@ -18,7 +18,7 @@ def FadeOut(c, num_fade):
 		fade_frames.append(core.std.Merge(clipa=fade_segment[i], clipb=blank, weight=i/(fade_segment.num_frames-1)))
 	return c[:-num_fade] + core.std.Splice(clips=fade_frames)
 
-def Subtract(c1, c2, luma=126, planes=[0, 1, 2], obvious=True):
+def Subtract(c1, c2, luma=126, planes=[0, 1, 2], obvious=False):
 	core = vs.get_core()
 	expr = ('{luma} x + y -').format(luma=luma)
 	expr = [(i in planes) * expr for i in range(3)]
