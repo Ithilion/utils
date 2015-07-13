@@ -15,7 +15,7 @@ def main():
 
 	temp_file_name = "sftpbatch_tmp.txt"
 	temp_file = os.path.join(tempfile.gettempdir(), temp_file_name)
-	known_hosts_dir = os.path.expanduser('~\.ssh')
+	known_hosts_dir = os.path.join(os.path.expanduser('~'), ".ssh")
 	known_hosts_file = os.path.join(known_hosts_dir, "known_hosts")
 
 	running = os.path.exists(temp_file)
@@ -48,7 +48,7 @@ def main():
 				sftp.close()
 				print("\n")
 			except Exception:
-				print("Something went wrong while processing current upload")
+				print("Something went wrong while processing current upload\n")
 			finally:
 				client.close()
 
