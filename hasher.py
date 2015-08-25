@@ -5,13 +5,26 @@
 # add to/remove from sendto or contextmenu shellex
 # GUI ?
 
+# for directory in os.walk("D:\test"):
+# 	root, _, files = directory
+# 	for filename in files:
+# 		path = os.path.join(root, filename)
+# 		with open(path, "rb") as f:
+# 			print(format(crc32(f.read()), "X"))
+
 import argparse
 import hashlib
 import os
 import sys
 from zlib import crc32
 
-chunk_size = 4096
+def progress_bar(current, total):
+	progress = current / total
+	if progress > 1:
+		progress = 1
+	print("\r[{:50s}] {:.1f}%".format('█' * int(progress * 50), progress * 100), end="")
+
+chunk_size = 8192
 
 parser = argparse.ArgumentParser(description = "File hash calculator")
 parser.add_argument("objects", help = "files to calculate the hash of", nargs="+")
@@ -37,54 +50,19 @@ else:
 
 for object_path in args.objects:
 	with open(object_path, "rb") as f:
+		size = os.fstat(f.fileno()).st_size
+		print(object_path)
 		if algorithm.lower() == "crc32":
 			crc = 0
-			for chunk in iter(lambda: f.read(chunk_size), b""):
+			for i, chunk in enumerate(iter(lambda: f.read(chunk_size), b""), start=1):
 				crc = crc32(chunk, crc)
-			print(object_path)
-			print("crc32:", format(crc, "08X"))
+				if i == 1 or not i % 10 or i * chunk_size > size:
+					progress_bar(i * chunk_size, size)
+			print("\r{:s}\rcrc32: {:08X}".format(" " * 69, crc))
 		else:
 			new_hash = hashlib.new(algorithm)
-			for chunk in iter(lambda: f.read(chunk_size), b""):
+			for i, chunk in enumerate(iter(lambda: f.read(chunk_size), b""), start=1):
 				new_hash.update(chunk)
-			print(object_path)
-			print("{:s}:".format(algorithm.lower()), new_hash.hexdigest().upper())
-
-# for directory in os.walk("D:\test"):
-# 	root, _, files = directory
-# 	for filename in files:
-# 		path = os.path.join(root, filename)
-# 		with open(path, "rb") as f:
-# 			print(format(crc32(f.read()), "X"))
-
-# 'DSA'
-# 'DSA-SHA'
-# 'dsaEncryption'
-# 'dsaWithSHA'
-# 'ecdsa-with-SHA1'
-# 'md4'
-# 'MD4'
-# 'MD5'
-# 'md5'
-# 'ripemd160'
-# 'RIPEMD160'
-# 'sha'
-# 'SHA'
-# 'sha1'
-# 'SHA1'
-# 'SHA224'
-# 'sha224'
-# 'SHA256'
-# 'sha256'
-# 'SHA384'
-# 'sha384'
-# 'sha512'
-# 'SHA512'
-# 'whirlpool'
-
-# 'sha256'
-# 'sha384'
-# 'sha1'
-# 'sha512'
-# 'sha224'
-# 'md5'
+				if i == 1 or not i % 10 or i * chunk_size > size:
+					progress_bar(i * chunk_size, size)
+			print("\r{:s}\r{:s}:".format(" " * 69, algorithm.lower()), new_hash.hexdigest().upper())
