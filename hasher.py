@@ -58,11 +58,11 @@ for object_path in args.objects:
 				crc = crc32(chunk, crc)
 				if i == 1 or not i % 10 or i * chunk_size > size:
 					progress_bar(i * chunk_size, size)
-			print("\r{:s}\rcrc32: {:08X}".format(" " * 69, crc))
+			print("\r{:s}\rcrc32: {:08X}".format(" " * 59, crc))
 		else:
 			new_hash = hashlib.new(algorithm)
 			for i, chunk in enumerate(iter(lambda: f.read(chunk_size), b""), start=1):
 				new_hash.update(chunk)
 				if i == 1 or not i % 10 or i * chunk_size > size:
 					progress_bar(i * chunk_size, size)
-			print("\r{:s}\r{:s}:".format(" " * 69, algorithm.lower()), new_hash.hexdigest().upper())
+			print("\r{:s}\r{:s}:".format(" " * 59, algorithm.lower()), new_hash.hexdigest().upper())
