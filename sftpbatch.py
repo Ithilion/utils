@@ -63,7 +63,7 @@ def progress_bar(current, total):
 		progress = current / total
 	except ZeroDivisionError:
 		progress = 1
-	print("\r[{0:50s}] {1:.1f}%".format('#' * int(progress * 50), progress * 100), end="")
+	print("\r[{0:50s}] {1:.1f}%".format('█' * int(progress * 50), progress * 100), end="")
 
 if __name__ == "__main__":
 	main()

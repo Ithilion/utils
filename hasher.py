@@ -27,6 +27,7 @@ def progress_bar(current, total):
 chunk_size = 8192
 
 parser = argparse.ArgumentParser(description = "File hash calculator")
+parser.add_argument("-n", "--notruncate", help = "don't truncate paths to 79 characters", action='store_true')
 parser.add_argument("objects", help = "files to calculate the hash of", nargs="+")
 args = parser.parse_args()
 
@@ -51,7 +52,7 @@ else:
 for object_path in args.objects:
 	with open(object_path, "rb") as f:
 		size = os.fstat(f.fileno()).st_size
-		print(object_path)
+		print(object_path) if len(object_path) <= 79 or args.notruncate else print("..." + object_path[-76:])
 		if algorithm.lower() == "crc32":
 			crc = 0
 			for i, chunk in enumerate(iter(lambda: f.read(chunk_size), b""), start=1):
