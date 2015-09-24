@@ -4,8 +4,8 @@ import random
 import pyperclip
 
 parser = argparse.ArgumentParser(description="A cryptographically secure (i think) password generator")
-parser.add_argument("-n", type = int, choices = list(range(8,257)), default = 16, help = "number of generated charaters; valid range is 8-256; default is 16", metavar="")
-parser.add_argument("-t", choices = ["an", "noalt", "full"], default = "an", help = "type of generated characters; valid input is 'an' (alphanumeric), 'noalt' (all printable ASCII characters except space, ` and ~) or 'full' (all printable ASCII characters except space); default is 'an'", metavar="")
+parser.add_argument("-n", type = int, choices = list(range(8,257)), default = 16, metavar="", help = "number of generated charaters; valid range is 8-256; default is 16")
+parser.add_argument("-t", choices = ["an", "noalt", "full"], default = "an", metavar="", help = "type of generated characters; valid input is 'an' (alphanumeric), 'noalt' (all printable ASCII characters except space, ` and ~) or 'full' (all printable ASCII characters except space); default is 'an'")
 args = parser.parse_args()
 
 if args.t == "an":

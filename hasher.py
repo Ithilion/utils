@@ -27,8 +27,8 @@ def progress_bar(current, total):
 chunk_size = 8192
 
 parser = argparse.ArgumentParser(description = "File hash calculator")
-parser.add_argument("-n", "--notruncate", help = "don't truncate paths to 79 characters", action='store_true')
-parser.add_argument("objects", help = "files to calculate the hash of", nargs="+")
+parser.add_argument("-n", "--notruncate", action='store_true', help = "don't truncate paths to 79 characters")
+parser.add_argument("objects", nargs="+", help = "files to calculate the hash of")
 args = parser.parse_args()
 
 supported_algorithms = list(hashlib.algorithms_available) + ["crc32"]
