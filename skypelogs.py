@@ -20,7 +20,13 @@ parser.add_argument("-d", "--directory", help = "logs will be stored in a subdir
 args = parser.parse_args()
 
 if args.user:
-	main_db_path = os.path.join(os.getenv('APPDATA'), "Skype", args.user, "main.db")
+	if sys.platform.startswith("win32"):
+		main_db_path = os.path.join(os.getenv('APPDATA'), "Skype", args.user, "main.db")
+	elif sys.platform.startswith("linux"):
+		main_db_path = os.path.join("~", ".Skype", args.user, "main.db")
+	else:
+		print("Unsupported OS")
+		sys.exit()
 	if not os.path.isfile(main_db_path):
 		print("The main.db file could not be found")
 		sys.exit()
@@ -42,6 +48,9 @@ if args.directory:
 		sys.exit()
 	logs_folder = os.path.join(args.directory, "skype_logs")
 os.makedirs(logs_folder, exist_ok=True)
+
+print("main.db path: {:s}".format(main_db_path))
+print("output path: {:s}".format(logs_folder))
 
 conn = sqlite3.connect(main_db_path)
 
