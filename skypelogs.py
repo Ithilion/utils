@@ -1,3 +1,11 @@
+# TODO:
+# conversation displayname in filename
+# body_xml cleansing
+# don't access tuples directly (e.g. mgs[0])
+# with statement for sqlite connection
+# other Messages types ?
+# continuous monitoring ?
+
 import argparse
 import os
 import re
