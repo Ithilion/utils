@@ -12,14 +12,18 @@ import re
 import sys
 import sqlite3
 from datetime import datetime
+from html import unescape
 
 parser = argparse.ArgumentParser(description = "Skype logs dumper")
 parser.add_argument("-u", "--user", help = "use this Skype user's main.db")
 parser.add_argument("-p", "--path", help = "path to specific main.db (or ortherwise named)")
-parser.add_argument("-d", "--directory", help = "logs will be stored in a subdirectory (\"skype_logs\") of this directory; if not provided, current active directory will be used")
+parser.add_argument("-d", "--directory", help = "logs will be stored in a subdirectory (\"logs\") of this directory; if not provided, current active directory will be used")
 args = parser.parse_args()
 
-if args.user:
+if args.user and args.path:
+	print("Use only one main.db source")
+	sys.exit()
+elif args.user:
 	if sys.platform.startswith("win32"):
 		main_db_path = os.path.join(os.getenv('APPDATA'), "Skype", args.user, "main.db")
 	elif sys.platform.startswith("linux"):
@@ -30,27 +34,26 @@ if args.user:
 	if not os.path.isfile(main_db_path):
 		print("The main.db file could not be found")
 		sys.exit()
-
 elif args.path:
 	main_db_path = args.path
 	if not os.path.isfile(main_db_path):
 		print("The main.db file could not be found")
 		sys.exit()
-
 else:
-	print("You have to specify a main.db file")
+	print("You have to specify a main.db source")
 	sys.exit()
 
-logs_folder = "skype_logs"
+logs_folder = "logs"
 if args.directory:
 	if not os.path.exists(args.directory):
 		print("The folder does not exist")
 		sys.exit()
-	logs_folder = os.path.join(args.directory, "skype_logs")
+	logs_folder = os.path.join(args.directory, "logs")
 os.makedirs(logs_folder, exist_ok=True)
 
 print("main.db path: {:s}".format(main_db_path))
 print("output path: {:s}".format(logs_folder))
+print("")
 
 conn = sqlite3.connect(main_db_path)
 
@@ -83,11 +86,11 @@ for conv in c1.fetchall():
 						break
 				if found != -1 and found + 1 != len(rowlist):
 					print("Updating conv: {:s}".format(conv[1]))
-					f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], msg[4].replace("\n", "\t").replace("\r", "")) for msg in rowlist[found + 1:]]))
+					f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], unescape(msg[4].replace("\n", "\t").replace("\r", ""))) for msg in rowlist[found + 1:]]))
 				if found != -1 and found + 1 == len(rowlist):
 					print("Nothing to update for conv: {:s}".format(conv[1]))
 				if found == -1:
 					print("Could not find a suitable starting row for conv: {:s}".format(conv[1]))
 			except NameError:
 				print("Initial population for conv: {:s}".format(conv[1]))
-				f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], msg[4].replace("\n", "\t").replace("\r", "")) for msg in rowlist]))
+				f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], unescape(msg[4].replace("\n", "\t").replace("\r", ""))) for msg in rowlist]))
