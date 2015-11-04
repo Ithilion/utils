@@ -90,7 +90,8 @@ for conv in c1.fetchall():
 				if found != -1 and found + 1 == len(rowlist):
 					print("Nothing to update for conv: {:s}".format(conv[1]))
 				if found == -1:
-					print("Could not find a suitable starting row for conv: {:s}".format(conv[1]))
+					print("Could not find a suitable starting row for conv: {:s}, appending every new message".format(conv[1]))
+					f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], unescape(msg[4].replace("\n", "\t").replace("\r", ""))) for msg in rowlist]))
 			except NameError:
 				print("Initial population for conv: {:s}".format(conv[1]))
 				f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], unescape(msg[4].replace("\n", "\t").replace("\r", ""))) for msg in rowlist]))
