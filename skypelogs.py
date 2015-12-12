@@ -16,8 +16,8 @@ from html import unescape
 
 parser = argparse.ArgumentParser(description = "Skype logs dumper")
 parser.add_argument("-u", "--user", help = "use this Skype user's main.db")
-parser.add_argument("-p", "--path", help = "path to specific main.db (or ortherwise named)")
-parser.add_argument("-d", "--directory", help = "logs will be stored in a subdirectory (\"logs\") of this directory; if not provided, current active directory will be used")
+parser.add_argument("-p", "--path", help = "path to specific main.db (or otherwise named)")
+parser.add_argument("-d", "--directory", help = "logs will be stored in a subdirectory (\"logs\") of this directory (of current directory if not provided)")
 args = parser.parse_args()
 
 if args.user and args.path:

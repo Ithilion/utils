@@ -1,4 +1,5 @@
 # TODO:
+# show final part of path when truncating
 # multiple algorithms at the same time
 # default algorithm (setting)
 # files and folders together

@@ -6,7 +6,7 @@ import random
 
 from lxml import etree
 
-parser = argparse.ArgumentParser(description = "Converts a .qpf frame list to a .xml Matroska chapters file")
+parser = argparse.ArgumentParser(description = "Converts a .qpf frame list file to a .xml Matroska chapters file")
 parser.add_argument("inputfile", help = ".qpf file to convert; output file name is the same of input file but with .xml extension (will be overwritten if it already exists)")
 parser.add_argument("-z", "--noframezero", action='store_true', help = "do not include frame zero")
 parser.add_argument("-l", "--language", default="ita", help = "chapter language in ISO639-2 format (no check against any language list is done); default is 'ita'")
