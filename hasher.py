@@ -1,17 +1,10 @@
 # TODO:
+# default algorithm (setting)
 # show final part of path when truncating
 # multiple algorithms at the same time
-# default algorithm (setting)
 # files and folders together
 # add to/remove from sendto or contextmenu shellex
 # GUI ?
-
-# for directory in os.walk("D:\test"):
-# 	root, _, files = directory
-# 	for filename in files:
-# 		path = os.path.join(root, filename)
-# 		with open(path, "rb") as f:
-# 			print(format(crc32(f.read()), "X"))
 
 import argparse
 import hashlib
