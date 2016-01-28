@@ -22,7 +22,11 @@ cleanse = [
 	re.compile("<ss .*?>"),
 	re.compile("</ss>"),
 	re.compile("<b .*?>"),
-	re.compile("</b>"),
+	re.compile("</>"),
+	re.compile("<s .*?>"),
+	re.compile("</s>"),
+	re.compile("<i .*?>"),
+	re.compile("</i>"),
 	]
 
 def main():
