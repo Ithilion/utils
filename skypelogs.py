@@ -85,10 +85,14 @@ def main():
 			file_path = os.path.join(logs_folder, "{:s}.txt".format(conv[1].replace(":", "_").replace("/", "_")))
 			open(file_path, "a").close()
 			with open(file_path, "r+", encoding="utf-8") as f:
+				line = None
 				for line in f:
 					pass
-				try:
+				if line is not None:
 					line = line.strip("\n")
+					if conv[1] == "19:7a3f2a1b9a5747318230b9483e16a4fb@thread.skype":
+						print("i can reach here!")
+						print(line)
 					result = match_log_line.match(line)
 					time = int(datetime.strptime(result.group(1), '%Y/%m/%d %H:%M:%S').timestamp())
 					remote_id = int(result.group(2))
@@ -100,15 +104,15 @@ def main():
 							found = i
 							break
 					if found != -1 and found + 1 != len(rowlist):
-						print("Updating conv: {:s}".format(conv[1]))
+						print("Updating: {:s}".format(conv[1]))
 						f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], cleanse_body_xml(msg[4])) for msg in rowlist[found + 1:]]))
 					if found != -1 and found + 1 == len(rowlist):
-						print("Nothing to update for conv: {:s}".format(conv[1]))
+						print("Up-to-date: {:s}".format(conv[1]))
 					if found == -1:
-						print("Could not find a suitable starting row for conv: {:s}, appending every new message".format(conv[1]))
+						print("Appending all: {:s}".format(conv[1]))
 						f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], cleanse_body_xml(msg[4])) for msg in rowlist]))
-				except NameError:
-					print("Initial population for conv: {:s}".format(conv[1]))
+				else:
+					print("Initial population: {:s}".format(conv[1]))
 					f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], cleanse_body_xml(msg[4])) for msg in rowlist]))
 
 def cleanse_body_xml(body_xml):
