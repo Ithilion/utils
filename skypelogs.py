@@ -90,9 +90,6 @@ def main():
 					pass
 				if line is not None:
 					line = line.strip("\n")
-					if conv[1] == "19:7a3f2a1b9a5747318230b9483e16a4fb@thread.skype":
-						print("i can reach here!")
-						print(line)
 					result = match_log_line.match(line)
 					time = int(datetime.strptime(result.group(1), '%Y/%m/%d %H:%M:%S').timestamp())
 					remote_id = int(result.group(2))
