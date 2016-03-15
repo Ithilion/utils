@@ -18,12 +18,12 @@ def progress_bar(current, total):
 		progress = 1
 	print("\r[{:50s}] {:.1f}%".format('█' * int(progress * 50), progress * 100), end="")
 
-chunk_size = 8192
-
 parser = argparse.ArgumentParser(description = "File hash calculator")
 parser.add_argument("-n", "--notruncate", action='store_true', help = "don't truncate paths to 79 characters")
 parser.add_argument("objects", nargs="+", help = "files to calculate the hash of")
 args = parser.parse_args()
+
+chunk_size = 8192
 
 supported_algorithms = list(hashlib.algorithms_available) + ["crc32"]
 print_supported_algorithms = sorted(set([algorithm.lower() for algorithm in supported_algorithms]))
