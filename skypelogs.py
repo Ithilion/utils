@@ -12,6 +12,23 @@ import sqlite3
 from datetime import datetime
 from html import unescape
 
+match_log_line = re.compile("(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}) (\d+) \[.+\]\[(.+)\]\t(.*)")
+cleanse = [
+	re.compile("</?legacyquote>"),
+	re.compile("<quote .*?>"),
+	re.compile("</quote>"),
+	re.compile("<a .*?>"),
+	re.compile("</a>"),
+	re.compile("<ss .*?>"),
+	re.compile("</ss>"),
+	re.compile("<b .*?>"),
+	re.compile("</>"),
+	re.compile("<s .*?>"),
+	re.compile("</s>"),
+	re.compile("<i .*?>"),
+	re.compile("</i>"),
+	]
+
 def main():
 	parser = argparse.ArgumentParser(description = "Skype logs dumper")
 	parser.add_argument("-u", "--user", help = "use this Skype user's main.db")
@@ -94,23 +111,6 @@ def main():
 				else:
 					print("Initial population: {:s}".format(conv[1]))
 					f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], cleanse_body_xml(msg[4])) for msg in rowlist]))
-
-match_log_line = re.compile("(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}) (\d+) \[.+\]\[(.+)\]\t(.*)")
-cleanse = [
-	re.compile("</?legacyquote>"),
-	re.compile("<quote .*?>"),
-	re.compile("</quote>"),
-	re.compile("<a .*?>"),
-	re.compile("</a>"),
-	re.compile("<ss .*?>"),
-	re.compile("</ss>"),
-	re.compile("<b .*?>"),
-	re.compile("</>"),
-	re.compile("<s .*?>"),
-	re.compile("</s>"),
-	re.compile("<i .*?>"),
-	re.compile("</i>"),
-	]
 
 def cleanse_body_xml(body_xml):
 	body_xml = unescape(body_xml.replace("\n", "\t").replace("\r", ""))
