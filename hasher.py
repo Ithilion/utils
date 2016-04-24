@@ -1,13 +1,12 @@
 # TODO:
 # default algorithm (setting)
-# show final part of path when truncating
 # multiple algorithms at the same time
-# files and folders together
 # add to/remove from sendto or contextmenu shellex
 # GUI ?
 
 import argparse
 import hashlib
+import io
 import os
 import sys
 from zlib import crc32
@@ -18,9 +17,34 @@ def progress_bar(current, total):
 		progress = 1
 	print("\r[{:50s}] {:.1f}%".format('█' * int(progress * 50), progress * 100), end="")
 
+def worker(file, is_bytes):
+	with io.BytesIO(file) if is_bytes else open(file, "rb") as f:
+		f.seek(0, os.SEEK_END)
+		size = f.tell()
+		f.seek(0, os.SEEK_SET)
+		if algorithm.lower() == "crc32":
+			crc = 0
+			for i, chunk in enumerate(iter(lambda: f.read(chunk_size), b""), start=1):
+				crc = crc32(chunk, crc)
+				if i == 1 or not i % 10 or i * chunk_size > size:
+					progress_bar(i * chunk_size, size)
+			crc_text = "{:08X}".format(crc)
+			print("\r{:s}\rcrc32: {:s}".format(" " * 59, crc_text), end="")
+			return crc_text
+		else:
+			new_hash = hashlib.new(algorithm)
+			for i, chunk in enumerate(iter(lambda: f.read(chunk_size), b""), start=1):
+				new_hash.update(chunk)
+				if i == 1 or not i % 10 or i * chunk_size > size:
+					progress_bar(i * chunk_size, size)
+			new_hash_text = new_hash.hexdigest().upper()
+			print("\r{:s}\r{:s}: {:s}".format(" " * 59, algorithm.lower(), new_hash_text), end="")
+			return new_hash_text
+
 parser = argparse.ArgumentParser(description = "File hash calculator")
 parser.add_argument("-n", "--notruncate", action='store_true', help = "don't truncate paths to 79 characters")
-parser.add_argument("objects", nargs="+", help = "files to calculate the hash of")
+parser.add_argument("-p", "--path", action='store_true', help = "include path in listing")
+parser.add_argument("items", nargs="+", help = "files to calculate the hash of")
 args = parser.parse_args()
 
 chunk_size = 8192
@@ -43,21 +67,16 @@ else:
 	print("Unrecognized algorithm")
 	sys.exit()
 
-for object_path in args.objects:
-	with open(object_path, "rb") as f:
-		size = os.fstat(f.fileno()).st_size
-		print(object_path) if len(object_path) <= 79 or args.notruncate else print("..." + object_path[-76:])
-		if algorithm.lower() == "crc32":
-			crc = 0
-			for i, chunk in enumerate(iter(lambda: f.read(chunk_size), b""), start=1):
-				crc = crc32(chunk, crc)
-				if i == 1 or not i % 10 or i * chunk_size > size:
-					progress_bar(i * chunk_size, size)
-			print("\r{:s}\rcrc32: {:08X}".format(" " * 59, crc))
-		else:
-			new_hash = hashlib.new(algorithm)
-			for i, chunk in enumerate(iter(lambda: f.read(chunk_size), b""), start=1):
-				new_hash.update(chunk)
-				if i == 1 or not i % 10 or i * chunk_size > size:
-					progress_bar(i * chunk_size, size)
-			print("\r{:s}\r{:s}:".format(" " * 59, algorithm.lower()), new_hash.hexdigest().upper())
+for item_path in args.items:
+	item_text = item_path if args.path else os.path.basename(item_path)
+	print(item_text) if len(item_text) <= 79 or args.notruncate else print("..." + item_text[-76:])
+	if os.path.isdir(item_path):
+		files_hashes = []
+		for path, directory, file in os.walk(item_path):
+			for f in file:
+				files_hashes.append(worker(os.path.join(path, f), False))
+		worker("".join(files_hashes).encode("utf-8"), True)
+		print("")
+	else:
+		worker(item_path, False)
+		print("")
