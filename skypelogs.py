@@ -15,6 +15,7 @@ from html import unescape
 match_log_line = re.compile("(\d{4}/\d{2}/\d{2} \d{2}:\d{2}:\d{2}) (\d+) \[.+\]\[(.+)\]\t(.*)")
 cleanse = [
 	re.compile("</?legacyquote>"),
+	re.compile("</?alertmatch>"),
 	re.compile("<quote .*?>"),
 	re.compile("</quote>"),
 	re.compile("<a .*?>"),
