@@ -67,6 +67,8 @@ else:
 	print("Unrecognized algorithm")
 	sys.exit()
 
+print("")
+
 for item_path in args.items:
 	item_text = item_path if args.path else os.path.basename(item_path)
 	print(item_text) if len(item_text) <= 79 or args.notruncate else print("..." + item_text[-76:])
@@ -80,3 +82,5 @@ for item_path in args.items:
 	else:
 		worker(item_path, False)
 		print("")
+
+input("\nPress enter key...")
