@@ -1,5 +1,4 @@
 # TODO:
-# default algorithm (setting)
 # multiple algorithms at the same time
 # add to/remove from sendto or contextmenu shellex
 # GUI ?
@@ -41,7 +40,11 @@ def worker(file, is_bytes):
 			print("\r{:s}\r{:s}: {:s}".format(" " * 59, algorithm.lower(), new_hash_text), end="")
 			return new_hash_text
 
+supported_algorithms = list(hashlib.algorithms_available) + ["crc32"]
+print_supported_algorithms = sorted(set([algorithm.lower() for algorithm in supported_algorithms]))
+
 parser = argparse.ArgumentParser(description = "File hash calculator")
+parser.add_argument("-a", choices=print_supported_algorithms, required=True, metavar="", dest="algorithm", help="hash algorithm to use; available choices: " + ", ".join(print_supported_algorithms))
 parser.add_argument("-n", "--notruncate", action='store_true', help = "don't truncate paths to 79 characters")
 parser.add_argument("-p", "--path", action='store_true', help = "include path in listing")
 parser.add_argument("items", nargs="+", help = "files to calculate the hash of")
@@ -49,25 +52,12 @@ args = parser.parse_args()
 
 chunk_size = 8192
 
-supported_algorithms = list(hashlib.algorithms_available) + ["crc32"]
-print_supported_algorithms = sorted(set([algorithm.lower() for algorithm in supported_algorithms]))
-print("Choose from these algorithms:", ", ".join(print_supported_algorithms))
-
-algorithm_input = input("--> ")
-try:
-	algorithm = algorithm_input.split()[0]
-except IndexError:
-	print("You didn't insert anything...")
-	sys.exit()
-
-position = [supported_algorithms[i] for i, x in enumerate(supported_algorithms) if x.lower() == algorithm.lower()]
+position = [supported_algorithms[i] for i, x in enumerate(supported_algorithms) if x.lower() == args.algorithm.lower()]
 if position:
 	algorithm = position[0]
 else:
 	print("Unrecognized algorithm")
 	sys.exit()
-
-print("")
 
 for item_path in args.items:
 	item_text = item_path if args.path else os.path.basename(item_path)

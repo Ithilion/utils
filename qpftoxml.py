@@ -8,9 +8,9 @@ from lxml import etree
 
 parser = argparse.ArgumentParser(description = "Converts a .qpf frame list file to a .xml Matroska chapters file")
 parser.add_argument("inputfile", help = ".qpf file to convert; output file name is the same of input file but with .xml extension (will be overwritten if it already exists)")
+parser.add_argument("-f", "--fps", default="24000/1001", help = "custom fps; use fpsnum(/|:)fpsden notation (e.g. 24/1 or 30000:1001); default is 24000/1001")
 parser.add_argument("-z", "--noframezero", action='store_true', help = "do not include frame zero")
 parser.add_argument("-l", "--language", default="ita", help = "chapter language in ISO639-2 format (no check against any language list is done); default is 'ita'")
-parser.add_argument("-f", "--fps", default="24000/1001", help = "custom fps; use fpsnum(/|:)fpsden notation (e.g. 24/1 or 30000:1001); default is 24000/1001")
 args = parser.parse_args()
 
 if len(args.language) != 3:
