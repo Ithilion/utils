@@ -42,7 +42,7 @@ def main():
 		sys.exit()
 	elif args.user:
 		if sys.platform.startswith("win32"):
-			main_db_path = os.path.join(os.getenv('APPDATA'), "Skype", args.user, "main.db")
+			main_db_path = os.path.join(os.environ["APPDATA"], "Skype", args.user, "main.db")
 		elif sys.platform.startswith("linux"):
 			main_db_path = os.path.join("~", ".Skype", args.user, "main.db")
 		else:
