@@ -1,8 +1,3 @@
-# TODO:
-# multiple algorithms at the same time
-# add to/remove from sendto or contextmenu shellex
-# GUI ?
-
 import argparse
 import hashlib
 import io

@@ -1,9 +1,3 @@
-# TODO:
-# better body_xml cleansing
-# don't access tuples directly (e.g. mgs[0])
-# with statement for sqlite connection
-# other Messages types ?
-
 import argparse
 import os
 import re
@@ -23,7 +17,7 @@ cleanse = [
 	re.compile("<ss .*?>"),
 	re.compile("</ss>"),
 	re.compile("<b .*?>"),
-	re.compile("</>"),
+	re.compile("</b>"),
 	re.compile("<s .*?>"),
 	re.compile("</s>"),
 	re.compile("<i .*?>"),
