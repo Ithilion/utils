@@ -22,7 +22,7 @@ cleanse = [
 	re.compile("</s>"),
 	re.compile("<i .*?>"),
 	re.compile("</i>"),
-	]
+]
 
 def main():
 	parser = argparse.ArgumentParser(description = "Skype logs dumper")

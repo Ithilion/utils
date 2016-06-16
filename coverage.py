@@ -30,43 +30,51 @@ s.mount('https://', MyAdapter())
 locale.setlocale(locale.LC_ALL, 'ita_ita')
 
 parser = argparse.ArgumentParser(description = "Telecom Italia coverage files checker")
-parser.add_argument("--dslam", action="store_true", help = "download ethernet DSLAM files")
+parser.add_argument("--atm", action="store_true", help = "download ADSL ATM files")
+parser.add_argument("--eth", action="store_true", help = "download ADSL Ethernet files")
 parser.add_argument("--olt", action="store_true", help = "download NGA OLT files")
 parser.add_argument("--onu", action="store_true", help = "download NGA ONU files")
 parser.add_argument("--all", action="store_true", help = "download all files")
-parser.add_argument("-s", "--search", help = "term to search in the files")
+parser.add_argument("search", help = "string to search in the files")
 args = parser.parse_args()
 
-dslam_planned = "https://www.wholesale.telecomitalia.com/sitepub/58/Copertura pianificata ADSL su DSLAM ETHERNET da Centrale e da Armadio.zip"
-dslam_active = "https://www.wholesale.telecomitalia.com/sitepub/58/ADSL attiva su DSLAM ETHERNET da Centrale e da Armadio.zip"
+atm_planned = "https://www.wholesale.telecomitalia.com/sitepub/58/Copertura pianificata Adsl su DSLAM ATM da Centrale e da Armadio.zip"
+atm_active = "https://www.wholesale.telecomitalia.com/sitepub/58/ADSL attiva su DSLAM ATM da Centrale e da Armadio.zip"
+eth_planned = "https://www.wholesale.telecomitalia.com/sitepub/58/Copertura pianificata ADSL su DSLAM ETHERNET da Centrale e da Armadio.zip"
+eth_active = "https://www.wholesale.telecomitalia.com/sitepub/58/ADSL attiva su DSLAM ETHERNET da Centrale e da Armadio.zip"
 olt_planned = "https://www.wholesale.telecomitalia.com/sitepub/59/Centrali NGA pianificate.zip"
 olt_active = "https://www.wholesale.telecomitalia.com/sitepub/59/Centrali NGA attive.zip"
 onu_planned = "https://www.wholesale.telecomitalia.com/sitepub/59/Copertura pianificata FTTCab.zip"
 onu_active = "https://www.wholesale.telecomitalia.com/sitepub/59/Copertura attiva FTTCab.zip"
 
 status_date_dict = {
-	dslam_planned: 13,
-	dslam_active: 13,
+	atm_planned: 10,
+	atm_active: 10,
+	eth_planned: 13,
+	eth_active: 13,
 	olt_planned: 15,
 	olt_active: 15,
 	onu_planned: 19,
 	onu_active: 23,
 }
 
-dslam = [dslam_planned, dslam_active]
+atm = [atm_planned, atm_active]
+eth = [eth_planned, eth_active]
 olt = [olt_planned, olt_active]
 onu = [onu_planned, onu_active]
 
+files = []
 if args.all:
-	files = dslam + olt + onu
-elif args.dslam:
-	files = dslam
-elif args.olt:
-	files = olt
-elif args.onu:
-	files = onu
+	files = files + atm + eth + olt + onu
 else:
-	files = dslam + olt
+	if args.atm:
+		files = files + atm
+	if args.eth:
+		files = files + eth
+	if args.olt:
+		files = files + olt
+	if args.onu:
+		files = files + onu
 
 temp_dir = "coverage_temp"
 os.makedirs(temp_dir, exist_ok=True)

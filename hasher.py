@@ -39,7 +39,7 @@ supported_algorithms = list(hashlib.algorithms_available) + ["crc32"]
 print_supported_algorithms = sorted(set([algorithm.lower() for algorithm in supported_algorithms]))
 
 parser = argparse.ArgumentParser(description = "File hash calculator")
-parser.add_argument("-a", choices=print_supported_algorithms, required=True, metavar="", dest="algorithm", help="hash algorithm to use; available choices: " + ", ".join(print_supported_algorithms))
+parser.add_argument("-a", choices=print_supported_algorithms, default="sha1", metavar="", dest="algorithm", help="hash algorithm to use; available choices: " + ", ".join(print_supported_algorithms) + "; default is 'sha1'.")
 parser.add_argument("-n", "--notruncate", action='store_true', help = "don't truncate paths to 79 characters")
 parser.add_argument("-p", "--path", action='store_true', help = "include path in listing")
 parser.add_argument("items", nargs="+", help = "files to calculate the hash of")
