@@ -62,7 +62,7 @@ for item_path in args.items:
 		for path, directory, file in os.walk(item_path):
 			for f in file:
 				files_hashes.append(worker(os.path.join(path, f), False))
-		worker("".join(files_hashes).encode("utf-8"), True)
+		worker("".join(sorted(files_hashes)).encode("utf-8"), True)
 		print("")
 	else:
 		worker(item_path, False)
