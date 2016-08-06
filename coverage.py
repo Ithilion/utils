@@ -98,7 +98,7 @@ try:
 			for sheet in xml_file.sheets():
 				for row_index in range(sheet.nrows):
 					for column_index in range(sheet.ncols):
-						if args.search in str(sheet.cell_value(row_index, column_index)).lower():
+						if args.search.lower() in str(sheet.cell_value(row_index, column_index)).lower():
 							cell_list = sheet.row_values(row_index)
 							status_date = cell_list[status_date_dict[file]]
 							if isinstance(status_date, float):
