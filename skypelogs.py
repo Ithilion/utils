@@ -107,6 +107,8 @@ def main():
 					print("Initial population: {:s}".format(conv[1]))
 					f.write("".join(["{:s} {:d} [{:s}][{:s}]\t{:s}\n".format(datetime.fromtimestamp(msg[0]).strftime('%Y/%m/%d %H:%M:%S'), msg[1], msg[2], msg[3], cleanse_body_xml(msg[4])) for msg in rowlist]))
 
+	input("\nPress enter key...")
+
 def cleanse_body_xml(body_xml):
 	body_xml = unescape(body_xml.replace("\n", "\t").replace("\r", ""))
 	for regex in cleanse:
