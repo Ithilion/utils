@@ -42,10 +42,10 @@ atm_planned = "https://www.wholesale.telecomitalia.com/sitepub/58/Copertura pian
 atm_active = "https://www.wholesale.telecomitalia.com/sitepub/58/ADSL attiva su DSLAM ATM da Centrale e da Armadio.zip"
 eth_planned = "https://www.wholesale.telecomitalia.com/sitepub/58/Copertura pianificata ADSL su DSLAM ETHERNET da Centrale e da Armadio.zip"
 eth_active = "https://www.wholesale.telecomitalia.com/sitepub/58/ADSL attiva su DSLAM ETHERNET da Centrale e da Armadio.zip"
-olt_planned = "https://www.wholesale.telecomitalia.com/sitepub/59/Centrali NGA pianificate.zip"
-olt_active = "https://www.wholesale.telecomitalia.com/sitepub/59/Centrali NGA attive.zip"
-onu_planned = "https://www.wholesale.telecomitalia.com/sitepub/59/Copertura pianificata FTTCab.zip"
-onu_active = "https://www.wholesale.telecomitalia.com/sitepub/59/Copertura attiva FTTCab.zip"
+olt_planned = "https://www.wholesale.telecomitalia.com/sitepub/59_Coperture_Bitstream_NGA_e_VULA/Centrali NGA pianificate.zip"
+olt_active = "https://www.wholesale.telecomitalia.com/sitepub/59_Coperture_Bitstream_NGA_e_VULA/Centrali NGA attive.zip"
+onu_planned = "https://www.wholesale.telecomitalia.com/sitepub/59_Coperture_Bitstream_NGA_e_VULA/Copertura pianificata FTTCab.zip"
+onu_active = "https://www.wholesale.telecomitalia.com/sitepub/59_Coperture_Bitstream_NGA_e_VULA/Copertura attiva FTTCab.zip"
 
 status_date_dict = {
 	atm_planned: 10,
