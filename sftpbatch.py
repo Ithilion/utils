@@ -33,8 +33,15 @@ def main():
 				except StopIteration:
 					break
 
-			hostname, username, localfile, remotefile = firstline
-			print(hostname, username, localfile, remotefile)
+			hostname_port, username, localfile, remotefile = firstline
+
+			try:
+				hostname, port = hostname_port.split(":")
+			except ValueError:
+				hostname = hostname_port
+				port = 22
+
+			print(hostname, port, username, localfile, remotefile)
 
 			client = paramiko.client.SSHClient()
 			os.makedirs(known_hosts_dir, exist_ok=True)
@@ -42,7 +49,7 @@ def main():
 			client.load_host_keys(known_hosts_file)
 			client.set_missing_host_key_policy(paramiko.client.AutoAddPolicy())
 			try:
-				client.connect(hostname, username=username)
+				client.connect(hostname, port=port, username=username)
 				sftp = client.open_sftp()
 				sftp.put(localfile, remotefile, progress_bar)
 				sftp.close()
