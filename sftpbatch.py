@@ -49,13 +49,14 @@ def main():
 			client.load_host_keys(known_hosts_file)
 			client.set_missing_host_key_policy(paramiko.client.AutoAddPolicy())
 			try:
-				client.connect(hostname, port=port, username=username)
+				client.connect(hostname, port=int(port), username=username)
 				sftp = client.open_sftp()
 				sftp.put(localfile, remotefile, progress_bar)
 				sftp.close()
 				print("\n")
-			except Exception:
+			except Exception as e:
 				print("Something went wrong while processing current upload\n")
+				print("{:s}".format(e))
 			finally:
 				client.close()
 
