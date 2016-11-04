@@ -38,14 +38,14 @@ parser.add_argument("--all", action="store_true", help = "download all files")
 parser.add_argument("search", help = "string to search in the files")
 args = parser.parse_args()
 
-atm_planned = "https://www.wholesale.telecomitalia.com/sitepub/58/Copertura pianificata Adsl su DSLAM ATM da Centrale e da Armadio.zip"
-atm_active = "https://www.wholesale.telecomitalia.com/sitepub/58/ADSL attiva su DSLAM ATM da Centrale e da Armadio.zip"
-eth_planned = "https://www.wholesale.telecomitalia.com/sitepub/58/Copertura pianificata ADSL su DSLAM ETHERNET da Centrale e da Armadio.zip"
-eth_active = "https://www.wholesale.telecomitalia.com/sitepub/58/ADSL attiva su DSLAM ETHERNET da Centrale e da Armadio.zip"
-olt_planned = "https://www.wholesale.telecomitalia.com/sitepub/59_Coperture_Bitstream_NGA_e_VULA/Centrali NGA pianificate.zip"
-olt_active = "https://www.wholesale.telecomitalia.com/sitepub/59_Coperture_Bitstream_NGA_e_VULA/Centrali NGA attive.zip"
-onu_planned = "https://www.wholesale.telecomitalia.com/sitepub/59_Coperture_Bitstream_NGA_e_VULA/Copertura pianificata FTTCab.zip"
-onu_active = "https://www.wholesale.telecomitalia.com/sitepub/59_Coperture_Bitstream_NGA_e_VULA/Copertura attiva FTTCab.zip"
+atm_planned = "https://www.wholesale.telecomitalia.com/sitepub/SFTP/58_Coperture_Bitstream_e_EASY_IP_ADSL/Copertura pianificata Adsl su DSLAM ATM da Centrale e da Armadio.zip"
+atm_active = "https://www.wholesale.telecomitalia.com/sitepub/SFTP/58_Coperture_Bitstream_e_EASY_IP_ADSL/ADSL attiva su DSLAM ATM da Centrale e da Armadio.zip"
+eth_planned = "https://www.wholesale.telecomitalia.com/sitepub/SFTP/58_Coperture_Bitstream_e_EASY_IP_ADSL/Copertura pianificata ADSL su DSLAM ETHERNET da Centrale e da Armadio.zip"
+eth_active = "https://www.wholesale.telecomitalia.com/sitepub/SFTP/58_Coperture_Bitstream_e_EASY_IP_ADSL/ADSL attiva su DSLAM ETHERNET da Centrale e da Armadio.zip"
+olt_planned = "https://www.wholesale.telecomitalia.com/sitepub/SFTP/59_Coperture_Bitstream_NGA_e_VULA/Centrali NGA pianificate.zip"
+olt_active = "https://www.wholesale.telecomitalia.com/sitepub/SFTP/59_Coperture_Bitstream_NGA_e_VULA/Centrali NGA attive.zip"
+onu_planned = "https://www.wholesale.telecomitalia.com/sitepub/SFTP/59_Coperture_Bitstream_NGA_e_VULA/Copertura pianificata FTTCab.zip"
+onu_active = "https://www.wholesale.telecomitalia.com/sitepub/SFTP/59_Coperture_Bitstream_NGA_e_VULA/Copertura attiva FTTCab.zip"
 
 status_date_dict = {
 	atm_planned: 10,
