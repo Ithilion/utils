@@ -67,9 +67,11 @@ if not running:
 		try:
 			client.connect(hostname, port=int(port), username=username)
 			sftp = client.open_sftp()
-			sftp.put(localfile, remotefile, progress_bar)
 			if not args.noblock:
+				sftp.put(localfile, remotefile, progress_bar)
 				print("")
+			else:
+				sftp.put(localfile, remotefile)
 			sftp.close()
 		except Exception as e:
 			logging.exception("Something went wrong while processing current upload")
