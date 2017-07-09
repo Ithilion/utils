@@ -17,6 +17,7 @@ parser.add_argument("hostname", help = "the host to connect to")
 parser.add_argument("username", help = "the user to connect as")
 parser.add_argument("localfile", help = "path to local file")
 parser.add_argument("remotefile", help = "path to remote file")
+parser.add_argument("--noblock", action = "store_true", help = "don't ask for input at the end of the script")
 args = parser.parse_args()
 
 temp_file_name = "sftpbatch_tmp.txt"
@@ -72,4 +73,5 @@ if not running:
 			f.writelines(data[1:])
 	os.remove(temp_file)
 
-input("\nPress enter key...")
+if not args.noblock:
+	input("\nPress enter key...")
