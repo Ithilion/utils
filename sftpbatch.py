@@ -1,5 +1,6 @@
 import argparse
 import csv
+import logging
 import os
 import tempfile
 
@@ -20,6 +21,13 @@ parser.add_argument("remotefile", help = "path to remote file")
 parser.add_argument("--noblock", action = "store_true", help = "don't ask for input at the end of the script")
 args = parser.parse_args()
 
+logging_dir = os.path.join(os.getenv("APPDATA"), "sftpbatch")
+os.makedirs(logging_dir, exist_ok=True)
+if args.noblock:
+	logging.basicConfig(filename=os.path.join(logging_dir, "sftpbatch.log"), format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
+else:
+	logging.basicConfig(format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
+
 temp_file_name = "sftpbatch_tmp.txt"
 temp_file = os.path.join(tempfile.gettempdir(), temp_file_name)
 known_hosts_dir = os.path.join(os.path.expanduser('~'), ".ssh")
@@ -30,7 +38,7 @@ running = os.path.exists(temp_file)
 with open(temp_file, "a", newline='') as f:
 	writer = csv.writer(f)
 	writer.writerow([args.hostname, args.username, args.localfile, args.remotefile])
-	print("added:", args.hostname, args.username, args.localfile, args.remotefile)
+	logging.info("added: {:s} {:s} {:s} {:s}".format(args.hostname, args.username, args.localfile, args.remotefile))
 
 if not running:
 	while True:
@@ -49,7 +57,7 @@ if not running:
 			hostname = hostname_port
 			port = 22
 
-		print("processing:", hostname_port, username, localfile, remotefile)
+		logging.info("processing: {:s} {:s} {:s} {:s}".format(hostname_port, username, localfile, remotefile))
 
 		client = paramiko.client.SSHClient()
 		os.makedirs(known_hosts_dir, exist_ok=True)
@@ -60,10 +68,11 @@ if not running:
 			client.connect(hostname, port=int(port), username=username)
 			sftp = client.open_sftp()
 			sftp.put(localfile, remotefile, progress_bar)
+			if not args.noblock:
+				print("")
 			sftp.close()
-			print("")
-		except Exception:
-			print("Something went wrong while processing current upload")
+		except Exception as e:
+			logging.exception("Something went wrong while processing current upload")
 		finally:
 			client.close()
 
