@@ -1,5 +1,5 @@
 import argparse
-import random
+import secrets
 
 import pyperclip
 
@@ -21,7 +21,7 @@ newline = ""
 for i in range(args.n):
 	temppass = ""
 	for i in range(args.l):
-		temppass += chr(random.SystemRandom().choice(passrange))
+		temppass += chr(secrets.choice(passrange))
 	finalpass += newline + temppass
 	newline = "\n"
 
