@@ -21,7 +21,7 @@ parser.add_argument("remotefile", help = "path to remote file")
 parser.add_argument("--noblock", action = "store_true", help = "don't ask for input at the end of the script")
 args = parser.parse_args()
 
-logging_dir = os.path.join(os.getenv("APPDATA"), "sftpbatch")
+logging_dir = os.path.join(os.getenv("APPDATA"), "backup")
 os.makedirs(logging_dir, exist_ok=True)
 if args.noblock:
 	logging.basicConfig(filename=os.path.join(logging_dir, "sftpbatch.log"), format="%(asctime)s %(levelname)s %(message)s", level=logging.INFO)
