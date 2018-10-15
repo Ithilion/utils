@@ -26,4 +26,4 @@ for i in range(args.n):
 	newline = "\n"
 
 pyperclip.copy(finalpass)
-print("password copied to clipboard")
+print(f'password {finalpass} copied to clipboard')
