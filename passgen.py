@@ -6,10 +6,12 @@ import pyperclip
 parser = argparse.ArgumentParser(description="A cryptographically secure (i think) password generator")
 parser.add_argument("-l", type = int, choices = list(range(8,257)), default = 16, metavar="", help = "length of the generated password; valid range is 8-256; default is 16")
 parser.add_argument("-n", type = int, default = 1, help = "number of generated passwords")
-parser.add_argument("-t", choices = ["an", "noalt", "full"], default = "an", metavar="", help = "type of generated characters; valid input is 'an' (alphanumeric), 'noalt' (all printable ASCII characters except space, ` and ~) or 'full' (all printable ASCII characters except space); default is 'an'")
+parser.add_argument("-t", choices = ["anl", "an", "noalt", "full"], default = "anl", metavar="", help = "type of generated characters; valid input is 'anl' (lowercase alphanumeric), 'an' (alphanumeric), 'noalt' (all printable ASCII characters except space, ` and ~) or 'full' (all printable ASCII characters except space); default is 'anl'")
 args = parser.parse_args()
 
-if args.t == "an":
+if args.t == "anl":
+	passrange = list(range(48, 58)) + list(range(97, 123))
+elif args.t == "an":
 	passrange = list(range(48, 58)) + list(range(65, 91)) + list(range(97, 123))
 elif args.t == "noalt":
 	passrange = list(range(33, 96)) + list(range(97, 126))
